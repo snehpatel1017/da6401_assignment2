@@ -135,7 +135,7 @@ def build_sweep_config(args: argparse.Namespace) -> Dict[str, Any]:
     return sweep_config
 
 
-def main():
+def get_sweep_config():
     """Main function to parse arguments and build sweep configuration"""
     args = parse_args()
     sweep_config = build_sweep_config(args)
@@ -152,17 +152,49 @@ def main():
         'count': args.count
     }
 
+class Custom_config:
+    def __init__(self, sweep_config: Dict[str, Any], project: str, entity: str, count: int):
+        
+        self.project = project
+        self.entity = entity
+        self.count = count
+        self.train_dir = sweep_config['parameters']['train_dir']['value']
+        self.test_dir = sweep_config['parameters']['test_dir']['value']
+        self.epochs = sweep_config['parameters']['epochs']['value']
+        self.batch_size = sweep_config['parameters']['batch_size']['value']
+        self.input_size = sweep_config['parameters']['input_size']['value']
+        self.num_filters = sweep_config['parameters']['num_filters']['value']
+        self.filter_size = sweep_config['parameters']['filter_size']['value']
+        self.activation = sweep_config['parameters']['activation']['value']
+        self.filter_organization = sweep_config['parameters']['filter_organization']['value']
+        self.data_augmentation = sweep_config['parameters']['data_augmentation']['value']
+        self.use_batchnorm = sweep_config['parameters']['use_batchnorm']['value']
+        self.dropout_rate = sweep_config['parameters']['dropout_rate']['value']
+        self.dense_neurons = sweep_config['parameters']['dense_neurons']['value']
+        self.learning_rate = sweep_config['parameters']['learning_rate']['value']
+       
+
+def convert_sweep_config_to_dict(sweep_config,project,entity,count):
+    CONFIG = Custom_config(
+        sweep_config=sweep_config,
+        project=project,
+        entity=entity,
+        count=count
+    )
+    return CONFIG 
+
 
 if __name__ == "__main__":
-    config = main()
-    print("till now good")
-    print(config["sweep_config"])
+    config = get_sweep_config()
+   
+    CONFIG = convert_sweep_config_to_dict(config["sweep_config"],config["project"],config["entity"],config["count"])
     wandb.login()
+    train_with_wandb(CONFIG)
 
     # Create the sweep
-    sweep_id = wandb.sweep(config["sweep_config"], project="da6401_assignment2")
+    # sweep_id = wandb.sweep(config["sweep_config"], project="da6401_assignment2")
 
     # Run the sweep (limit to 20 runs for efficiency)
-    wandb.agent(sweep_id, entity="cs24m048-iit-madras", project="da6401_assignment2", function=train_with_wandb, count=2)
+    # wandb.agent(sweep_id, entity="cs24m048-iit-madras", project="da6401_assignment2", function=train_with_wandb, count=2)
     
    
