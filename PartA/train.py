@@ -2,11 +2,13 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
-from tqdm.notebook import tqdm  # for progress bar
+from tqdm.auto import tqdm  # for progress bar
 import wandb
 import gc
 from .Model import FlexibleCNN  # Import your model class
 from .Utility_functions import create_prediction_grid , create_data_loaders # Import your data loader function
+import os
+os.environ['TQDM_DISABLE'] = '0'  # Force enable tqdm
 
 # Clean up GPU memory
 # gc.collect()
@@ -90,9 +92,9 @@ def train_with_wandb(config=None):
         # Training loop
         for epoch in range(config.epochs):
             # Training phase
-            # if torch.cuda.is_available():
-            #     torch.cuda.empty_cache()
-            #     gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                gc.collect()
             model.train()
             train_loss = 0.0
             correct = 0
@@ -123,8 +125,8 @@ def train_with_wandb(config=None):
                         'acc': 100. * correct / total
                     })
                     del inputs, targets, outputs, loss
-                    # if torch.cuda.is_available():
-                    #     torch.cuda.empty_cache()
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
 
             train_loss = train_loss / len(train_loader)
             train_accuracy = 100. * correct / total
@@ -157,8 +159,8 @@ def train_with_wandb(config=None):
                         })
                         # Free memory
                         del inputs, targets, outputs, loss
-                        # if torch.cuda.is_available():
-                        #     torch.cuda.empty_cache()
+                        if torch.cuda.is_available():
+                            torch.cuda.empty_cache()
 
             val_loss = val_loss / len(val_loader)
             val_accuracy = 100. * correct / total
@@ -191,22 +193,22 @@ def train_with_wandb(config=None):
                         })
                         # Free memory
                         del inputs, targets, outputs, loss
-                        # if torch.cuda.is_available():
-                        #     torch.cuda.empty_cache()
+                        if torch.cuda.is_available():
+                            torch.cuda.empty_cache()
 
             test_loss = test_loss / len(test_loader)
             test_accuracy = 100. * correct / total
 
             # Log metrics to wandb
-            wandb.log({
-                'epoch': epoch + 1,
-                'train_loss': train_loss,
-                'train_accuracy': train_accuracy,
-                'val_loss': val_loss,
-                'val_accuracy': val_accuracy,
-                'test_loss': test_loss,
-                'test_accuracy': test_accuracy
-            })
+            # wandb.log({
+            #     'epoch': epoch + 1,
+            #     'train_loss': train_loss,
+            #     'train_accuracy': train_accuracy,
+            #     'val_loss': val_loss,
+            #     'val_accuracy': val_accuracy,
+            #     'test_loss': test_loss,
+            #     'test_accuracy': test_accuracy
+            # })
             
             # Generate and log prediction grid
             create_prediction_grid(model, test_loader, CLASSES)

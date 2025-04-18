@@ -188,7 +188,8 @@ if __name__ == "__main__":
     config = get_sweep_config()
    
     CONFIG = convert_sweep_config_to_dict(config["sweep_config"],config["project"],config["entity"],config["count"])
-    wandb.login()
+    # wandb.login()
+    # wandb.init(project="da6401_assignment2", entity="cs24m048-iit-madras")
     train_with_wandb(CONFIG)
 
     # Create the sweep

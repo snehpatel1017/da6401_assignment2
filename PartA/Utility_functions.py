@@ -43,7 +43,7 @@ def create_prediction_grid(model, test_loader, class_names):
             if len(all_images) >= 30:  # We need 30 images for 10x3 grid
                 break
                 
-            inputs = inputs.to(torch.device)
+            inputs = inputs.to('cuda')
             outputs = model(inputs)
             probs = torch.nn.functional.softmax(outputs, dim=1)
             confidence, preds = torch.max(probs, 1)
@@ -159,10 +159,10 @@ def create_prediction_grid(model, test_loader, class_names):
     plt.savefig('test_predictions.png', dpi=300, bbox_inches='tight')
     
     # Log to wandb if desired
-    try:
-        wandb.log({"test_predictions_grid": wandb.Image(fig)})
-    except:
-        print("Couldn't log to wandb, continuing...")
+    # try:
+    #     wandb.log({"test_predictions_grid": wandb.Image(fig)})
+    # except:
+    #     print("Couldn't log to wandb, continuing...")
     
     return fig
 

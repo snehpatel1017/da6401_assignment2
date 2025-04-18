@@ -37,8 +37,8 @@ class Custom_config:
 if __name__ == "__main__":
     args = parse_args()
     CONFIG = Custom_config(args.dataset_path)
-    wandb.login()
-    wandb.init(project="da6401_assignment2", entity="cs24m048-iit-madras")
+    # wandb.login("")
+    # wandb.init(project="da6401_assignment2", entity="cs24m048-iit-madras")
     train_model_sweep(CONFIG)
 
     # Create the sweep
