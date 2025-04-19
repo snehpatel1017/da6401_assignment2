@@ -111,3 +111,5 @@ The experiments demonstrate that:
 1. **Part A**: The optimal model configuration uses double filter organization, GELU activation, and moderate dropout (0.2).
 2. **Part B**: The `freeze_first_k_layers` strategy achieves similar performance to training all layers while being more computationally efficient.
 3. Using 400×400 input images provides the optimal balance between accuracy and training speed.
+
+Wandb Report : https://api.wandb.ai/links/cs24m048-iit-madras/t2udzuv9
