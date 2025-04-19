@@ -29,8 +29,7 @@ This repository contains the implementation of a deep learning project focused o
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/dl-assignment-2.git
-   cd dl-assignment-2
+   git clone https://github.com/snehpatel1017/da6401_assignment2.git
    ```
 
 2. **Install dependencies**:
